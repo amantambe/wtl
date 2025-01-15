@@ -11,6 +11,8 @@ import COMPLETEDRIDES from "./routes/RidesCompleted.js";
 import CANCELRIDE from "./routes/CancelRide.js";
 import RIDERRIDES from "./routes/RiderRides.js";
 import UPCOMMINGRIDES from "./routes/UpcommingRides.js";
+import USERTABS from "./routes/UserTabs.js";
+
 
 const PORT = 7875;
 const app = express();
@@ -31,6 +33,7 @@ app.use("/RidesCompleted",COMPLETEDRIDES);
 app.use("/CancelRide",CANCELRIDE);
 app.use("/RiderRides",RIDERRIDES);
 app.use("/UpcommingRides",UPCOMMINGRIDES);
+app.use("/UserTabs",USERTABS);
 
 
 
