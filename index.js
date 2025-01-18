@@ -12,6 +12,7 @@ import CANCELRIDE from "./routes/CancelRide.js";
 import RIDERRIDES from "./routes/RiderRides.js";
 import UPCOMMINGRIDES from "./routes/UpcommingRides.js";
 import USERTABS from "./routes/UserTabs.js";
+import DRIVERRIDESTAB from "./routes/DriverRidesTab";
 
 
 const PORT = 7875;
@@ -34,8 +35,7 @@ app.use("/CancelRide",CANCELRIDE);
 app.use("/RiderRides",RIDERRIDES);
 app.use("/UpcommingRides",UPCOMMINGRIDES);
 app.use("/UserTabs",USERTABS);
-
-
+app.use("/DriverRidesTab",DRIVERRIDESTAB);
 
 app.listen(PORT, (err) => {
     if (err) throw err;

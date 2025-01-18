@@ -1,0 +1,106 @@
+import express from 'express';
+const router = express.Router();
+
+
+const sampleRides = [
+    {
+        "_id": "ride1",
+        "pickupLocation": "Location A",
+        "dropLocation": "Location B",
+        "pickupTime": "2024-10-27T10:00:00.000Z",
+        "driverName": "John Doe",
+        "driverContact": "123-456-7890",
+        "isCompleted": true,
+        "isCancelled": false,
+        "passengers": [
+            { "_id": "p1", "name": "Alice", "contact":"9876543210" },
+            { "_id": "p2", "name": "Bob", "contact":"9876543211" }
+        ]
+    },
+    {
+        "_id": "ride2",
+        "pickupLocation": "Location C",
+        "dropLocation": "Location D",
+        "pickupTime": "2024-10-28T12:00:00.000Z",
+        "driverName": "Jane Smith",
+        "driverContact": "987-654-3210",
+        "isCompleted": false,
+        "isCancelled": true,
+        "passengers": [
+            { "_id": "p3", "name": "Charlie", "contact":"9876543212" }
+        ]
+    },
+    {
+        "_id": "ride4",
+        "pickupLocation": "Location G",
+        "dropLocation": "Location H",
+        "pickupTime": "2024-10-26T12:00:00.000Z",
+        "driverName": "Jane Smith",
+        "driverContact": "987-654-3210",
+        "isCompleted": true,
+        "isCancelled": false,
+        "passengers": [
+            { "_id": "p6", "name": "Charlie", "contact":"9876543215" }
+        ]
+    },
+    {
+        "_id": "ride3",
+        "pickupLocation": "Location E",
+        "dropLocation": "Location F",
+        "pickupTime": "2024-10-29T15:00:00.000Z",
+        "driverName": "David Lee",
+        "driverContact": "555-123-4567",
+        "isCompleted": true,
+        "isCancelled": false,
+        "passengers": [
+            { "_id": "p4", "name": "Eva", "contact":"9876543213" },
+            { "_id": "p5", "name": "Frank", "contact":"9876543214" }
+        ]
+    }
+];
+
+router.get('/rides', (req, res) => {
+    try {
+        let filteredRides = [...sampleRides];
+
+        
+        const tab = req.query.tab;
+        if (tab === 'completed') {
+            filteredRides = filteredRides.filter(ride => ride.isCompleted && !ride.isCancelled);
+        } else if (tab === 'cancelled') {
+            filteredRides = filteredRides.filter(ride => ride.isCancelled);
+        } else if (tab === 'upcoming') {
+            filteredRides = filteredRides.filter(ride => !ride.isCompleted && !ride.isCancelled);
+        }
+
+        const startDate = req.query.startDate;
+        const endDate = req.query.endDate;
+
+        if (startDate) {
+            const start = new Date(startDate);
+            filteredRides = filteredRides.filter(ride => new Date(ride.pickupTime) >= start);
+        }
+
+        if (endDate) {
+            const end = new Date(endDate);
+            filteredRides = filteredRides.filter(ride => new Date(ride.pickupTime) <= end);
+        }
+
+        
+        const sortByDate = req.query.sortByDate;
+        if (sortByDate === 'asc') {
+            filteredRides.sort((a, b) => new Date(a.pickupTime) - new Date(b.pickupTime));
+        } else if (sortByDate === 'desc') {
+            filteredRides.sort((a, b) => new Date(b.pickupTime) - new Date(a.pickupTime));
+        }
+
+        res.json(filteredRides);
+    } catch (error) {
+        console.error("Error fetching rides:", error);
+        res.status(500).json({ message: "Server error" });
+        
+    }
+    
+});
+
+export default router;
